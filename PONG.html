@@ -1,6 +1,10 @@
+<!-- I don't remember when I created/followed this.
+	Edidted on April 9 2022
+		Added start menu and pause menu and "exit" prarmaters
+	-->
 <!doctype html>
 <html>
-	<canvas id = "gameCanvas" width="800" height ="600"></canvas>
+	<canvas id = "gameCanvas" width ="800" height = "600"></canvas>
 	<script>
 		var canvas;
 		var canvasContext;
@@ -8,13 +12,15 @@
 		var ballSpeedX = 10;
 		var ballY = 50;
 		var ballSpeedY = 4;
-
+		
 		var player1Score = 0;
 		var player2Score = 0;
 		const WINNING_SCORE = 3;
 		
 		var showingWinScreen = false;
-
+		var showingStartScreen = true;
+		var showingPauseScreen = false;
+		
 		var paddle1Y = 250;
 		var paddle2Y = 250;
 		const PADDLE_HEIGHT = 100;
@@ -36,10 +42,29 @@
 				player1Score = 0;
 				player2Score = 0;
 				showingWinScreen = false;
+			}else if(showingStartScreen){
+				player1Score = 0;
+				player2Score = 0;
+				showingStartScreen = false;
+			}else if(showingPauseScreen){
+				showingPauseScreen = false;
 			}
 		}
-
+		window.addEventListener('keydown', function (event) {
+		  if (event.key === 'Escape' && showingWinScreen == true) {
+			showingStartScreen = true;
+			player1Score = 0;
+			player2Score = 0;
+			showingWinScreen = false;
+			showingPauseScreen = false;
+			drawEverything();
+		  }else if(event.key === 'Escape' && showingPauseScreen == false && showingWinScreen == false){
+			showingPauseScreen = true;
+			drawEverything();
+		  }
+		})
 		window.onload = function(){
+			
 			canvas = document.getElementById('gameCanvas');
 			canvasContext = canvas.getContext ('2d');
 			var framesPerSecond = 30;
@@ -123,11 +148,25 @@
 			if(showingWinScreen){
 				canvasContext.fillStyle = 'white';
 				if (player1Score >= WINNING_SCORE){
-					canvasContext.fillText("Left Player Won",350,200);
+					canvasContext.fillText("Left Player Won",250,200);
 				}else if (player2Score >= WINNING_SCORE){
-					canvasContext.fillText("Right Player Won",350,200);
+					canvasContext.fillText("Right Player Won",250,200);
 				}
-				canvasContext.fillText("click to continue",350,500);
+				canvasContext.fillText("click to play again",250,500);
+				canvasContext.fillText("Escape key to main menu",250,550);
+				return;
+			}else if(showingStartScreen){
+				canvasContext.fillStyle = 'purple';
+				canvasContext.font = "80px Verdana";
+				canvasContext.fillText("PONG",150,100);
+				canvasContext.fillStyle = 'white'
+				canvasContext.font = "30px Verdana";
+				canvasContext.fillText("Click to start", 150, 200);
+				return;
+			}else if(showingPauseScreen){
+				canvasContext.fillStyle = 'white';
+				canvasContext.font = "30px Verdana";
+				canvasContext.fillText("Click to continue", 150, 200);
 				return;
 			}
 
