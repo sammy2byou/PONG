@@ -4,7 +4,9 @@
 	-->
 <!doctype html>
 <html>
+	
 	<canvas id = "gameCanvas" width ="800" height = "600"></canvas>
+	
 	<script>
 		var canvas;
 		var canvasContext;
@@ -64,12 +66,12 @@
 		  }
 		})
 		window.onload = function(){
-			
 			canvas = document.getElementById('gameCanvas');
 			canvasContext = canvas.getContext ('2d');
 			var framesPerSecond = 30;
 			setInterval(function(){
-				moveEverything();
+				//move
+				startGame();
 				drawEverything();
 			}, 1000/framesPerSecond);
 
@@ -79,6 +81,10 @@
 				var mousePos = calculateMousePos(evt);
 				paddle1Y = mousePos.y-(PADDLE_HEIGHT/2);
 				});
+		}
+		
+		function startGame(){
+			if(showingStartScreen==false) moveEverything();
 		}
 
 		function ballReset(){
